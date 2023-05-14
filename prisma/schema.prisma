@@ -18,6 +18,8 @@ model User {
   address String?
   password String? 
   confirmPassword String?
+
+  orders Order[]
 }
 
 model Product {
@@ -31,12 +33,18 @@ model Product {
   regularPrice Int?
   salePrice Int?
   isDiscounted Boolean? 
-  brand String
+
+  orderId String @db.ObjectId 
+  order Order? @relation(fields: [orderId], references: [id])
+
+  brandId String @db.ObjectId
+  brand Brand? @relation(fields: [brandId], references: [id])
 }
 
-model Categories{
+model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String[]
+  brands Brand[]
 }
 
 model Brand {
@@ -44,13 +52,18 @@ model Brand {
   name String
   logo String
   isFeatured Boolean?
+  products Product[]
+
+  categoryId String @db.ObjectId
+  category Category @relation(fields: [categoryId], references: [id])
 }
 
-model Orders {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  // customer id 
-  // products id
+model Order {
+  id String @id @default(auto()) @map("_id") @db.ObjectId  
   amount Int
   quantity Int
-  // purchaseDate @da
+  purchaseDate DateTime @default(now())
+  customerId String @db.ObjectId 
+  customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  products Product[]
 }
