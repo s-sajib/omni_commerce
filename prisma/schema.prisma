@@ -44,7 +44,8 @@ model Product {
 model Category{
   id String @id @default(auto()) @map("_id") @db.ObjectId
   name String[]
-  brands Brand[]
+  brandIds String[] @db.ObjectId
+  brands Brand[] @relation(fields: [brandIds], references: [id])
 }
 
 model Brand {
@@ -54,8 +55,8 @@ model Brand {
   isFeatured Boolean?
   products Product[]
 
-  categoryId String @db.ObjectId
-  category Category @relation(fields: [categoryId], references: [id])
+  categoryIds String[] @db.ObjectId
+  categories Category[] @relation(fields: [categoryIds], references: [id])
 }
 
 model Order {
