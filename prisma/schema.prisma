@@ -18,6 +18,7 @@ model User {
   address String?
   password String? 
   confirmPassword String?
+  role Role @default(CUSTOMER)
 
   orders Order[]
 }
@@ -67,4 +68,11 @@ model Order {
   customerId String @db.ObjectId 
   customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
   products Product[]
+}
+
+
+enum Role {
+  CUSTOMER
+  SELLER 
+  ADMIN
 }
