@@ -9,3 +9,48 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  email String? @unique
+  phone Int?
+  address String?
+  password String? 
+  confirmPassword String?
+}
+
+model Product {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  categories String[]
+  images String?
+  description String?
+  stock Int?
+  tags String[]
+  regularPrice Int?
+  salePrice Int?
+  isDiscounted Boolean? 
+  brand String
+}
+
+model Categories{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String[]
+}
+
+model Brand {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  logo String
+  isFeatured Boolean?
+}
+
+model Orders {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  // customer id 
+  // products id
+  amount Int
+  quantity Int
+  // purchaseDate @da
+}
