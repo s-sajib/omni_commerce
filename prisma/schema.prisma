@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  email String? @unique
+  phone Int?
+  address String?
+  password String? 
+  confirmPassword String?
+
+  orders Order[]
+}
+
+model Product {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String?
+  categories String[]
+  images String?
+  description String?
+  stock Int?
+  tags String[]
+  regularPrice Int?
+  salePrice Int?
+  isDiscounted Boolean? 
+
+  orderId String @db.ObjectId 
+  order Order? @relation(fields: [orderId], references: [id])
+
+  brandId String @db.ObjectId
+  brand Brand? @relation(fields: [brandId], references: [id])
+}
+
+model Category{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String[]
+  brands Brand[]
+}
+
+model Brand {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+  logo String
+  isFeatured Boolean?
+  products Product[]
+
+  categoryId String @db.ObjectId
+  category Category @relation(fields: [categoryId], references: [id])
+}
+
+model Order {
+  id String @id @default(auto()) @map("_id") @db.ObjectId  
+  amount Int
+  quantity Int
+  purchaseDate DateTime @default(now())
+  customerId String @db.ObjectId 
+  customer User @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  products Product[]
+}
