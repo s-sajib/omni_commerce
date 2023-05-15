@@ -17,6 +17,7 @@ model User {
   phone Int?
   address String?
   password String? 
+  hashedPassword String?
   confirmPassword String?
   role Role @default(CUSTOMER)
 
